@@ -1,2 +1,2 @@
 # web-dev-project-
-capstone project 
+Capstone Project 
