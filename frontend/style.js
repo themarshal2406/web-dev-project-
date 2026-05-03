@@ -44,7 +44,7 @@ async function loadVideos() {
   }
 
   data.forEach(video => {
-    const thumbnail = `https://picsum.photos/seed/${encodeURIComponent(video.title)}/300/180`;
+    const thumbnail = "./images/default-thumbnail.png";
 
     container.innerHTML += `
       <div class="video-card">
