@@ -16,20 +16,10 @@ async function submitVideo() {
   }
 
   try {
-    const res = await fetch("http://localhost:5001/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ title })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert("Server error");
-      return;
-    }
+    const videos = JSON.parse(localStorage.getItem("videos") || "[]");
+    const newVideo = { id: Date.now(), title: title };
+    videos.push(newVideo);
+    localStorage.setItem("videos", JSON.stringify(videos));
 
     alert("Video added!");
     closeModal();
@@ -43,8 +33,7 @@ async function submitVideo() {
 
 // LOAD VIDEOS
 async function loadVideos() {
-  const res = await fetch("http://localhost:5001/products");
-  const data = await res.json();
+  const data = JSON.parse(localStorage.getItem("videos") || "[]");
 
   const container = document.querySelector(".video-section");
   container.innerHTML = "";
@@ -74,9 +63,9 @@ async function loadVideos() {
 
 // DELETE VIDEO
 async function deleteVideo(id) {
-  await fetch(`http://localhost:5001/products/${id}`, {
-    method: "DELETE"
-  });
+  let videos = JSON.parse(localStorage.getItem("videos") || "[]");
+  videos = videos.filter(v => v.id !== id);
+  localStorage.setItem("videos", JSON.stringify(videos));
 
   loadVideos();
 }
@@ -86,7 +75,7 @@ document.getElementById("searchForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const query = document.querySelector(".search-input").value.toLowerCase();
-  const videos = document.querySelectorAll(".video-container");
+  const videos = document.querySelectorAll(".video-card, .video-container");
 
   videos.forEach(video => {
     const text = video.innerText.toLowerCase();
